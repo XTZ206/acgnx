@@ -1,7 +1,8 @@
 from typing import Literal
 import subjects
 from subjects import Subject
-from handlers import Handler, APIHandler, DBHandler
+import handlers
+from handlers import SubjectHandler
 
 class Viewer:
     def __init__(self, subjects: list[Subject] = None, updater: "Updater" = None, selector: "Selector" = None):
@@ -38,8 +39,8 @@ class Viewer:
             
 
     def update_subjects(self):
-        for subject in self.subjects:
-            subject.copy(self.updater.update(subject))
+        for index, subject in enumerate(self.subjects):
+            self.subjects[index] = self.updater.fetch(subject)
     
     def search_subjects(self, keyword: str):
         self.subjects = self.updater.search(keyword)
@@ -47,17 +48,16 @@ class Viewer:
 
     
 class Updater:
-    def __init__(self, handler: Handler|None = None, type=Literal["API", "DB", "NONE"]):
-        self.handler: APIHandler | DBHandler | None = handler
-        self.type = type
+    def __init__(self, handler: SubjectHandler | None = None):
+        self.handler: SubjectHandler | None = handler
 
-    def update(self, subject: Subject) -> Subject:
-        if self.type is "NONE":
+    def fetch(self, subject: Subject) -> Subject:
+        if self.handler is None:
             return subject
         return self.handler.fetch_subject(subject.id)
     
     def search(self, keyword: str) -> list[Subject]:
-        if self.type != "API":
+        if self.handler is None:
             return []
         return self.handler.search_subjects(keyword)
     

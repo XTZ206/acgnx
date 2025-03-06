@@ -55,7 +55,7 @@ class SubjectFactory:
 
         return subject
 
-class Subject(ABC):
+class Subject:
     def __init__(self, id=None):
         self.id: int = id
         self.name: str

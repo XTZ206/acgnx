@@ -6,13 +6,16 @@ import subjects
 from subjects import Subject
 
 
-class Handler(ABC):
+class SubjectHandler(ABC):
     @abstractmethod
     def fetch_subject(self, subject_id) -> "Subject":
         pass
+    @abstractmethod
+    def search_subjects(self, keyword) -> list["Subject"]:
+        pass
 
 
-class APIHandler(Handler):
+class APIHandler(SubjectHandler):
     def __init__(self):
         self.headers = {
             "User-Agent": "XTZ206/acgnx/0.0.1"
@@ -31,7 +34,7 @@ class APIHandler(Handler):
         return [self.subject_factory.get_subject_from_json(subject_json) for subject_json in response.json()["data"]]
 
 
-class DBHandler(Handler):
+class DBHandler(SubjectHandler):
     def __init__(self, dbpath):
         self.connection = sqlite3.connect(dbpath)
         self.connection.execute(
