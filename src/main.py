@@ -67,9 +67,6 @@ def main():
             viewer.list_subjects()
             print("Viewing search results")
             # TODO: Quick Dump of Searching Results
-            # selected = selector.select(viewer.subjects)
-            # if selected is not None:
-            #     dbhandler.insert_subjects([selected])
             return
             
 
