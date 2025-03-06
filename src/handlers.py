@@ -39,7 +39,7 @@ class DBHandler(SubjectHandler):
         self.connection = sqlite3.connect(dbpath)
         self.connection.execute(
             "CREATE TABLE IF NOT EXISTS SUBJECTS ("
-            "ID INT PRIMARY KEY, "
+            "ID INT, "
             "NAME TEXT, "
             "ALIASES TEXT, "
             "TYPE TEXT, "
@@ -76,7 +76,7 @@ class DBHandler(SubjectHandler):
     def search_subjects(self, keyword: str) -> list[Subject]:
         subjects = []
         rows = self.connection.execute(
-            "SELECT ID, NAME, ALIASES, TYPE, DATE, RATING, SUMMARY, INFOBOX, FROM SUBJECTS WHERE NAME LIKE ? OR ALIASES LIKE ?",
+            "SELECT ID, NAME, ALIASES, TYPE, DATE, RATING, SUMMARY, INFOBOX FROM SUBJECTS WHERE NAME LIKE ? OR ALIASES LIKE ?",
             (f"%{keyword}%", f"%{keyword}%")
         ).fetchall()
         for row in rows:
@@ -109,7 +109,7 @@ class DBHandler(SubjectHandler):
     def insert_subjects(self, subjects: list[Subject]):
         for subject in subjects:
             self.connection.execute(
-                "INSERT INTO SUBJECTS (ID, NAME, TYPE, DATE, RATING) VALUES (?, ?, ?, ?, ?)",
+                "REPLACE INTO SUBJECTS (ID, NAME, TYPE, DATE, RATING) VALUES (?, ?, ?, ?, ?)",
                 (subject.id, subject.name, subject.type, subject.date, subject.rating)
             )
             self.connection.execute("UPDATE SUBJECTS SET ALIASES = ? WHERE ID = ?", ("\n".join(subject.aliases), subject.id))

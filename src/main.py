@@ -25,6 +25,8 @@ def main():
     fetch_parser.add_argument("id", type=int, help="fetch subject with id")
     search_parser = subparsers.add_parser("search", help="search subjects with name")
     search_parser.add_argument("keyword", type=str, help="search keyword")
+    search_parser.add_argument("--online", action="store_true", help="search subjects from bgm.tv")
+    search_parser.add_argument("--store", action="store_true", help="store search results to database")
 
     args = argparser.parse_args()
     
@@ -62,11 +64,14 @@ def main():
             return              
 
         case "search":
-            viewer = view.Viewer([], view.Updater(apihandler), view.Selector())
+            
+            updater = view.Updater(apihandler) if args.online else view.Updater(dbhandler)
+            viewer = view.Viewer([], updater, view.Selector())
             viewer.search_subjects(args.keyword)
             viewer.list_subjects()
+            if args.store:
+                dbhandler.insert_subjects(viewer.subjects)
             print("Viewing search results")
-            # TODO: Quick Dump of Searching Results
             return
             
 
