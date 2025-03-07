@@ -13,9 +13,16 @@ def main():
     subparsers = argparser.add_subparsers(dest="command")
 
     list_parser = subparsers.add_parser(
-        "list", help="list subjects based on subject name and aliases"
+        "list", help="list subjects based on specified conditions"
     )
-    list_parser.add_argument("name", nargs="?", type=str, default="")
+    list_condition = list_parser.add_mutually_exclusive_group(required=True)
+    list_condition.add_argument(
+        "-n", "--name", type=str, help="list based subject name/aliases"
+    )
+    list_condition.add_argument(
+        "-a", "--all", action="store_true", help="list all subjects"
+    )
+
     view_parser = subparsers.add_parser("view", help="view subject with id")
     view_parser.add_argument("id", type=int, help="to-be-viewed subject id")
     update_parser = subparsers.add_parser(
@@ -33,15 +40,17 @@ def main():
     match args.command:
 
         case "list":
-            if args.name == "":
+            if args.all:
                 viewer = view.Viewer(dbhandler.fetch_all_subjects())
-            else:
+                viewer.list_subjects()
+            elif args.name is not None:
                 viewer = view.Viewer(dbhandler.search_subjects(args.name))
-            viewer.list_subjects()
+                viewer.list_subjects()
             return
 
         case "view":
             viewer = view.Viewer([Subject(id=args.id)], view.Updater(dbhandler))
+            viewer.update_subjects()
             viewer.view_subject()
             return
 
