@@ -58,7 +58,7 @@ class Viewer:
         print(subject.summary)
         print("RATING:", subject.rating)
         print("TAGS:")
-        print(*sorted(subject.tags, key=lambda x: x.count, reverse=True), sep=" / ")
+        print(*sorted(subject.tags, key=lambda t: t.count, reverse=True), sep=" / ")
         print("INFOBOX:")
         for key, value in subject.infobox:
             if isinstance(value, list):

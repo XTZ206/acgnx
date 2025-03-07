@@ -26,7 +26,7 @@ class APIHandler(SubjectHandler):
         subject.id = subject_json["id"]
         subject.name = subject_json["name"]
         subject.type = {1: "BOOK", 2: "ANIME", 3: "MUSIC", 4: "GAME", 6: "REAL"}.get(
-            subject_json["type"], "Unknown"
+            subject_json["type"], "OTHER"
         )
         subject.date = subject_json["date"]
 
