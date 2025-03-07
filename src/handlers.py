@@ -328,3 +328,8 @@ class DBHandler(SubjectHandler):
                 (self.get_infobox_field_from_subject(subject), subject.id),
             )
         self.connection.commit()
+
+    def delete_subjects(self, *subjects: Subject):
+        for subject in subjects:
+            self.connection.execute("DELETE FROM SUBJECTS WHERE ID = ?", (subject.id,))
+        self.connection.commit()
