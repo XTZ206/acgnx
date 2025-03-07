@@ -51,6 +51,9 @@ class Tag:
         self.name: str = name
         self.count: int = count
 
+    def __str__(self):
+        return f"{self.name} ({self.count})"
+
     def __repr__(self):
         return f"Tag(name={self.name}, count={self.count})"
 
