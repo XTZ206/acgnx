@@ -44,22 +44,27 @@ class Viewer:
                 str(subject.rating).ljust(rate_width),
                 str(subject.name).ljust(name_width),
             )
-    
-    def view_subject(self, subject: Subject, limit: int = 5):
-        print(f"ID: {subject.id}")
-        print(f"NAME: {subject.name}")
-        print(f"ALIASES: {', '.join(subject.aliases)}")
-        print(f"DATE: {subject.date}")
-        print(f"RATING: {subject.rating}")
-        print(f"SUMMARY: {subject.summary}")
-        print("INFOBOX:")
+
+    def view_subject(self):
+        subject = self.subjects[0]
+        print("ID:", subject.id)
+        print("NAME:", subject.name)
+        print("TYPE:", subject.type)
+        print("DATE:", subject.date)
         
-        for infokey, infovalue in subject.infobox:
-            limit -= 1
-            if limit == 0:
-                break
-            print(f"{infokey}: {"/".join(infovalue) if isinstance(infovalue, list) else infovalue}")
-            
+        print("ALIASES:")
+        print(*subject.aliases, sep="\n")
+        print("SUMMARY:") 
+        print(subject.summary)
+        print("RATING:", subject.rating)
+        print("TAGS:")
+        print(*sorted(subject.tags, key=lambda x: x.count, reverse=True), sep=" / ")
+        print("INFOBOX:")
+        for key, value in subject.infobox:
+            if isinstance(value, list):
+                print(f"{key}:", "/".join(value))
+            else:
+                print(f"{key}:", value)
 
     def update_subjects(self):
         for index, subject in enumerate(self.subjects):
