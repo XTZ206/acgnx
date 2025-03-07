@@ -272,6 +272,7 @@ class DBHandler(SubjectHandler):
                     "SELECT INFOBOX FROM SUBJECTS WHERE ID = ?", (subject.id,)
                 ).fetchone()[0]
             )
+        return subjects
 
     def update_subjects(self, *subjects: Subject):
         for subject in subjects:
