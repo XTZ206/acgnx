@@ -79,6 +79,9 @@ class Rating:
         )
 
     def __str__(self):
-        score = str(self.score) if self.score > 0 else "n/a"
-        total = str(self.total) if self.total > 0 else "n/a"
-        return f"{score} ({total})"
+        if self.score > 0 and self.total > 0:
+            return f"{self.score:.1f} ({self.total})"
+        elif self.score > 0:
+            return f"{self.score:.1f}"
+        else:
+            return "unknown"
