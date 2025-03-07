@@ -4,14 +4,14 @@ from subjects import Subject
 
 
 def main():
-    apihandler = handlers.APIHandler()
-    dbhandler = handlers.DBHandler("acgnx.db")
 
+    # Main Argument Parser
     argparser = argparse.ArgumentParser(
         prog="acgnx", usage="%(prog)s [command]", description="ACGN indeX v0.0.1"
     )
     subparsers = argparser.add_subparsers(dest="command")
 
+    # List Command Parser
     list_parser = subparsers.add_parser(
         "list", help="list subjects based on specified conditions"
     )
@@ -23,9 +23,11 @@ def main():
         "-a", "--all", action="store_true", help="list all subjects"
     )
 
+    # View Command Parser
     view_parser = subparsers.add_parser("view", help="view subject with id")
     view_parser.add_argument("id", type=int, help="to-be-viewed subject id")
 
+    # Update Command Parser
     update_parser = subparsers.add_parser(
         "update", help="update specified subject based on subject id"
     )
@@ -33,20 +35,28 @@ def main():
         "id", type=int, help="to-be-updated subject id", default=0
     )
 
+    # Fetch Command Parser
     fetch_parser = subparsers.add_parser(
         "fetch", help="fetch subject based on subject id"
     )
     fetch_parser.add_argument("id", type=int, help="to-be-fetched subject id")
 
+    # Remove Command Parser
     remove_parser = subparsers.add_parser(
         "remove", help="remove specified subject based on subject id"
     )
     remove_parser.add_argument("id", type=int, help="to-be-removed subject id")
 
+    # Search Command Parser
     search_parser = subparsers.add_parser("search", help="search subjects from bgm.tv")
     search_parser.add_argument("keyword", type=str, help="search keyword")
 
     args = argparser.parse_args()
+
+    # Initialize handlers
+    apihandler = handlers.APIHandler()
+    dbhandler = handlers.DBHandler("acgnx.db")
+
 
     match args.command:
 
