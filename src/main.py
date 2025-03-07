@@ -77,6 +77,7 @@ def main():
             dbhandler.insert_subjects(*viewer.subjects)
             viewer.list_subjects()
             print("All required subject fetched")
+            return
 
         case "search":
             updater = view.Updater(apihandler)
@@ -84,10 +85,6 @@ def main():
             viewer.search_subjects(args.keyword)
             viewer.list_subjects()
             print("Viewing searching results")
-            return
-
-        case "help":
-            argparser.print_help()
             return
 
         case _:
