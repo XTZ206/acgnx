@@ -86,5 +86,7 @@ class Rating:
             return f"{self.score:.1f} ({self.total})"
         elif self.score > 0:
             return f"{self.score:.1f}"
+        elif self.score == 0 and self.total == 0:
+            return "unrated"
         else:
             return "unknown"
