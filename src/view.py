@@ -69,11 +69,11 @@ class Viewer:
     def update_subjects(self):
         for index, subject in enumerate(self.subjects):
             self.subjects[index] = self.updater.fetch(subject)
-    
+
     def search_subjects(self, keyword: str):
         self.subjects = self.updater.search(keyword)
 
-    
+
 class Updater:
     def __init__(self, handler: SubjectHandler | None = None):
         self.handler: SubjectHandler | None = handler
@@ -82,12 +82,12 @@ class Updater:
         if self.handler is None:
             return subject
         return self.handler.fetch_subject(subject.id)
-    
+
     def search(self, keyword: str) -> list[Subject]:
         if self.handler is None:
             return []
         return self.handler.search_subjects(keyword)
-    
+
 
 class Selector:
     def __init__(self):
@@ -106,5 +106,5 @@ class Selector:
                     return subjects[3]
                 case "q":
                     return None
-            
+
         return subjects[index]
