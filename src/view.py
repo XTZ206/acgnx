@@ -11,15 +11,32 @@ class Viewer:
         self.selector: "Selector" = selector if selector is not None else Selector()
 
     def list_subjects(self):
-        print("{0:^6} {1:^6} {2:^10} {3:^4} {4:^30}".format("ID", "TYPE", "DATE", "RATE", "NAME"))
-        print("-" * 6, "-" * 6, "-" * 10, "-" * 4, "-" * 30)
+        id_width = 6
+        type_width = 6
+        date_width = 10
+        rate_width = 12
+        name_width = 30
+        print(
+            "ID".center(id_width),
+            "TYPE".center(type_width),
+            "DATE".center(date_width),
+            "RATE".center(rate_width),
+            "NAME".center(name_width),
+        )
+        print(
+            "-" * id_width,
+            "-" * type_width,
+            "-" * date_width,
+            "-" * rate_width,
+            "-" * name_width,
+        )
         for subject in self.subjects:
             print(
-                str(subject.id).rjust(6),
-                str(subject.type).rjust(6),
-                str(subject.date).rjust(10),
-                str(subject.rating).rjust(4),
-                str(subject.name)
+                str(subject.id).rjust(id_width),
+                str(subject.type).center(type_width),
+                str(subject.date).center(date_width),
+                str(subject.rating).ljust(rate_width),
+                str(subject.name).ljust(name_width),
             )
     
     def view_subject(self, subject: Subject, limit: int = 5):
