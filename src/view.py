@@ -4,8 +4,14 @@ from subjects import Subject
 import handlers
 from handlers import SubjectHandler
 
+
 class Viewer:
-    def __init__(self, subjects: list[Subject] = None, updater: "Updater" = None, selector: "Selector" = None):
+    def __init__(
+        self,
+        subjects: list[Subject] = None,
+        updater: "Updater" = None,
+        selector: "Selector" = None,
+    ):
         self.subjects = subjects if subjects is not None else []
         self.updater: "Updater" = updater if updater is not None else Updater()
         self.selector: "Selector" = selector if selector is not None else Selector()
@@ -62,7 +68,6 @@ class Viewer:
     def search_subjects(self, keyword: str):
         self.subjects = self.updater.search(keyword)
 
-
     
 class Updater:
     def __init__(self, handler: SubjectHandler | None = None):
@@ -78,6 +83,7 @@ class Updater:
             return []
         return self.handler.search_subjects(keyword)
     
+
 class Selector:
     def __init__(self):
         pass

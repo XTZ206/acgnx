@@ -3,15 +3,12 @@ import handlers, view
 from subjects import Subject
 
 
-
 def main():
     apihandler = handlers.APIHandler()
     dbhandler = handlers.DBHandler("acgnx.db")
 
     argparser = argparse.ArgumentParser(
-        prog="acgnx", 
-        usage="%(prog)s [command]",
-        description="ACGN indeX v0.0.1"
+        prog="acgnx", usage="%(prog)s [command]", description="ACGN indeX v0.0.1"
     )
     subparsers = argparser.add_subparsers(dest="command")
     
@@ -78,6 +75,7 @@ def main():
         case _:
             argparser.print_help()
             return          
+
 
 if __name__ == "__main__":
     main()

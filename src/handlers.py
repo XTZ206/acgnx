@@ -8,10 +8,11 @@ from subjects import Subject, Rating, Tag
 
 class SubjectHandler(ABC):
     @abstractmethod
-    def fetch_subject(self, subject_id) -> "Subject":
+    def fetch_subject(self, subject_id) -> Subject:
         pass
+
     @abstractmethod
-    def search_subjects(self, keyword) -> list["Subject"]:
+    def search_subjects(self, keyword) -> list[Subject]:
         pass
 
 
@@ -60,7 +61,7 @@ class APIHandler(SubjectHandler):
                 subject.infobox.append((infoitem["key"], [infoitem["value"]]))
 
         return subject
-    
+
     def fetch_subject(self, subject_id) -> "Subject":
         response = requests.get(
             f"https://api.bgm.tv/v0/subjects/{subject_id}", headers=self.headers
@@ -96,7 +97,7 @@ class DBHandler(SubjectHandler):
             "PRIMARY KEY (ID)"
             ")"
         )
-    
+
     def __del__(self):
         self.connection.close()
 
@@ -299,7 +300,7 @@ class DBHandler(SubjectHandler):
                 (self.get_infobox_field_from_subject(subject), subject.id),
             )
         self.connection.commit()
-    
+
     def insert_subjects(self, *subjects: Subject):
         for subject in subjects:
             self.connection.execute(
@@ -327,4 +328,3 @@ class DBHandler(SubjectHandler):
                 (self.get_infobox_field_from_subject(subject), subject.id),
             )
         self.connection.commit()
-        
