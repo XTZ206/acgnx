@@ -25,10 +25,14 @@ def main():
 
     view_parser = subparsers.add_parser("view", help="view subject with id")
     view_parser.add_argument("id", type=int, help="to-be-viewed subject id")
+
     update_parser = subparsers.add_parser(
         "update", help="update specified subject based on subject id"
     )
-    update_parser.add_argument("id", type=int, help="to-be-updated subject id")
+    update_parser.add_argument(
+        "id", type=int, help="to-be-updated subject id", default=0
+    )
+
     fetch_parser = subparsers.add_parser(
         "fetch", help="fetch subject based on subject id"
     )
@@ -41,6 +45,7 @@ def main():
 
     search_parser = subparsers.add_parser("search", help="search subjects from bgm.tv")
     search_parser.add_argument("keyword", type=str, help="search keyword")
+
     args = argparser.parse_args()
 
     match args.command:
@@ -61,7 +66,7 @@ def main():
             return
 
         case "update":
-            if args.id is None:
+            if args.id > 0:
                 viewer = view.Viewer(
                     dbhandler.fetch_all_subjects(), view.Updater(apihandler)
                 )
@@ -71,8 +76,12 @@ def main():
                 print("All subjects updated")
                 return
             else:
-                viewer = view.Viewer(dbhandler.fetch_subject(args.id))
-                viewer.list_subject()
+                viewer = view.Viewer(
+                    [dbhandler.fetch_subject(args.id)], view.Updater(apihandler)
+                )
+                viewer.update_subjects()
+                dbhandler.update_subjects(*viewer.subjects)
+                viewer.list_subjects()
                 print("All required subjects updated")
                 return
 
