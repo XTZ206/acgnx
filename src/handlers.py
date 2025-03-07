@@ -329,7 +329,7 @@ class DBHandler(SubjectHandler):
             )
         self.connection.commit()
 
-    def delete_subjects(self, *subjects: Subject):
+    def remove_subjects(self, *subjects: Subject):
         for subject in subjects:
             self.connection.execute("DELETE FROM SUBJECTS WHERE ID = ?", (subject.id,))
         self.connection.commit()

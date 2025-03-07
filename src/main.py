@@ -33,6 +33,12 @@ def main():
         "fetch", help="fetch subject based on subject id"
     )
     fetch_parser.add_argument("id", type=int, help="to-be-fetched subject id")
+
+    remove_parser = subparsers.add_parser(
+        "remove", help="remove specified subject based on subject id"
+    )
+    remove_parser.add_argument("id", type=int, help="to-be-removed subject id")
+
     search_parser = subparsers.add_parser("search", help="search subjects from bgm.tv")
     search_parser.add_argument("keyword", type=str, help="search keyword")
     args = argparser.parse_args()
@@ -77,6 +83,14 @@ def main():
             dbhandler.insert_subjects(*viewer.subjects)
             viewer.list_subjects()
             print("All required subject fetched")
+            return
+
+        case "remove":
+            viewer = view.Viewer([Subject(args.id)], view.Updater(dbhandler))
+            viewer.update_subjects()
+            dbhandler.remove_subjects(*viewer.subjects)
+            viewer.list_subjects()
+            print("All required subject removed")
             return
 
         case "search":
