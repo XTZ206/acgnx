@@ -3,7 +3,37 @@ import json
 
 
 class Subject:
-    def __init__(self, id=None):
+    """
+    A class to represent a subject.
+
+    Attributes:
+    ----------
+    id : int
+        The unique identifier for the subject.
+    name : str
+        The name of the subject.
+    type : str
+        The type/category of the subject.
+    date : str
+        The date associated with the subject.
+    aliases : list[str]
+        A list of alternative names for the subject.
+    summary : str
+        A brief summary or description of the subject.
+    rating : Rating
+        The rating of the subject.
+    tags : list[Tag]
+        A list of tags associated with the subject.
+    infobox : list[tuple[str, str | list[str]]]
+        A list of key-value pairs containing additional information about the subject.
+
+    Methods:
+    -------
+    __init__(self, id: int = -1):
+        Initializes the Subject with an optional id.
+    """
+
+    def __init__(self, id: int = -1):
         self.id: int = id
         self.name: str
         self.type: str
