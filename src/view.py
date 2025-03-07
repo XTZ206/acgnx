@@ -1,7 +1,4 @@
-from typing import Literal
-import subjects
 from subjects import Subject
-import handlers
 from handlers import SubjectHandler
 
 

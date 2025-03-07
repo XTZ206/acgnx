@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 import requests
 import sqlite3
 import json
-import subjects
 from subjects import Subject, Rating, Tag
 
 

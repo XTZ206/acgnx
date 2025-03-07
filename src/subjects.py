@@ -1,7 +1,3 @@
-from abc import ABC
-import json
-
-
 class Subject:
     """
     A class to represent a subject.
