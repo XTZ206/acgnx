@@ -1,9 +1,21 @@
 import argparse
+import configparser
 import handlers, view
 from subjects import Subject
 
-
 def main():
+
+    # Load Configurations
+    config = configparser.ConfigParser()
+    if not config.read("acgnx.ini"):
+        with open("acgnx.ini", "w") as configfile:
+            config["PATH"] = {"dbpath": "acgnx.db"}
+            config.write(configfile)
+    
+    config.read("acgnx.ini")
+    if "PATH" not in config:
+        config["PATH"] = {"dbpath": "acgnx.db"}
+        
 
     # Main Argument Parser
     argparser = argparse.ArgumentParser(
@@ -55,8 +67,7 @@ def main():
 
     # Initialize handlers
     apihandler = handlers.APIHandler()
-    dbhandler = handlers.DBHandler("acgnx.db")
-
+    dbhandler = handlers.DBHandler(config.get("PATH", "dbpath"))
 
     match args.command:
 
