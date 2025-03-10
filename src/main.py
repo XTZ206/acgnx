@@ -81,7 +81,11 @@ def main():
             return
 
         case "view":
-            viewer = view.Viewer([Subject(id=args.id)], view.Updater(dbhandler))
+            subject = dbhandler.fetch_subject(args.id)
+            if subject is None:
+                print(f"There is no such ID in the database.: {args.id}")
+                return
+            viewer = view.Viewer([subject], view.Updater(dbhandler))
             viewer.update_subjects()
             viewer.view_subject()
             return
@@ -116,6 +120,11 @@ def main():
             return
 
         case "remove":
+            subject_id = args.id
+            subject = dbhandler.fetch_subject(subject_id)
+            if subject is None:
+                print(f"There is no such ID in the database.: {subject_id}")
+                return
             viewer = view.Viewer([Subject(args.id)], view.Updater(dbhandler))
             viewer.update_subjects()
             dbhandler.remove_subjects(*viewer.subjects)

@@ -165,6 +165,11 @@ class DBHandler(SubjectHandler):
         return json.dumps(subject.infobox, ensure_ascii=False)
 
     def fetch_subject(self, subject_id: int) -> Subject:
+        result = self.connection.execute(
+            "SELECT NAME, TYPE, DATE FROM SUBJECTS WHERE ID = ? ", (subject_id,)
+        ).fetchone()
+        if result is None:
+            return None
         subject = Subject(subject_id)
         subject.name, subject.type, subject.date = self.connection.execute(
             "SELECT NAME, TYPE, DATE FROM SUBJECTS WHERE ID = ? ", (subject_id,)
