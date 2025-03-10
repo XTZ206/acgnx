@@ -3,6 +3,7 @@ import configparser
 import handlers, view
 from subjects import Subject
 
+
 def main():
 
     # Load Configurations
@@ -11,11 +12,10 @@ def main():
         with open("acgnx.ini", "w") as configfile:
             config["PATH"] = {"dbpath": "acgnx.db"}
             config.write(configfile)
-    
+
     config.read("acgnx.ini")
     if "PATH" not in config:
         config["PATH"] = {"dbpath": "acgnx.db"}
-        
 
     # Main Argument Parser
     argparser = argparse.ArgumentParser(
