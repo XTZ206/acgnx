@@ -48,10 +48,10 @@ class Viewer:
         print("NAME:", subject.name)
         print("TYPE:", subject.type)
         print("DATE:", subject.date)
-        
+
         print("ALIASES:")
         print(*subject.aliases, sep="\n")
-        print("SUMMARY:") 
+        print("SUMMARY:")
         print(subject.summary)
         print("RATING:", subject.rating)
         print("TAGS:")
