@@ -65,7 +65,13 @@ class APIHandler(SubjectHandler):
 
         return subject
 
-    def fetch_subject(self, subject_id) -> "Subject":
+    def check_subject(self, subject_id) -> bool:
+        response = requests.get(
+            f"https://api.bgm.tv/v0/subjects/{subject_id}", headers=self.headers
+        )
+        return response.status_code == 200
+
+    def fetch_subject(self, subject_id) -> Subject:
         response = requests.get(
             f"https://api.bgm.tv/v0/subjects/{subject_id}", headers=self.headers
         )
