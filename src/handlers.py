@@ -72,6 +72,9 @@ class APIHandler(SubjectHandler):
         return response.status_code == 200
 
     def fetch_subject(self, subject_id) -> Subject:
+        if not self.check_subject(subject_id):
+            raise SubjectNotFoundError(Subject(subject_id), "bgm.tv database")
+
         response = requests.get(
             f"https://api.bgm.tv/v0/subjects/{subject_id}", headers=self.headers
         )
@@ -183,12 +186,10 @@ class DBHandler(SubjectHandler):
         )
 
     def fetch_subject(self, subject_id: int) -> Subject:
-        result = self.connection.execute(
-            "SELECT NAME, TYPE, DATE FROM SUBJECTS WHERE ID = ? ", (subject_id,)
-        ).fetchone()
-        if result is None:
-            return None
         subject = Subject(subject_id)
+        if not self.check_subject(subject_id):
+            raise SubjectNotFoundError(subject, "acgnx database")
+
         subject.name, subject.type, subject.date = self.connection.execute(
             "SELECT NAME, TYPE, DATE FROM SUBJECTS WHERE ID = ? ", (subject_id,)
         ).fetchone()

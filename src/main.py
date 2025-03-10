@@ -2,6 +2,7 @@ import argparse
 import configparser
 import handlers, view
 from subjects import Subject
+from exceptions import SubjectNotFoundError
 
 
 def main():
@@ -81,55 +82,62 @@ def main():
             return
 
         case "view":
-            subject = dbhandler.fetch_subject(args.id)
-            if subject is None:
-                print(f"There is no such ID in the database.: {args.id}")
-                return
-            viewer = view.Viewer([subject], view.Updater(dbhandler))
-            viewer.update_subjects()
-            viewer.view_subject()
+            try:
+                viewer = view.Viewer([Subject(args.id)], view.Updater(dbhandler))
+                viewer.update_subjects()
+                viewer.view_subject()
+            except SubjectNotFoundError as error:
+                print(f"Error: {error}")
             return
 
         case "update":
             if args.id > 0:
-                viewer = view.Viewer(
-                    dbhandler.fetch_all_subjects(), view.Updater(apihandler)
-                )
-                viewer.update_subjects()
-                dbhandler.update_subjects(*viewer.subjects)
-                viewer.list_subjects()
-                print("All subjects updated")
+                try:
+                    viewer = view.Viewer(
+                        dbhandler.fetch_all_subjects(), view.Updater(apihandler)
+                    )
+                    viewer.update_subjects()
+                    dbhandler.update_subjects(*viewer.subjects)
+                    viewer.list_subjects()
+                    print("All required subjects updated")
+                except SubjectNotFoundError as error:
+                    print(f"Error: {error}")
                 return
             else:
-                viewer = view.Viewer(
-                    [dbhandler.fetch_subject(args.id)], view.Updater(apihandler)
-                )
-                viewer.update_subjects()
-                dbhandler.update_subjects(*viewer.subjects)
-                viewer.list_subjects()
-                print("All required subjects updated")
+                try:
+                    viewer = view.Viewer(
+                        [dbhandler.fetch_subject(args.id)], view.Updater(apihandler)
+                    )
+                    viewer.update_subjects()
+                    dbhandler.update_subjects(*viewer.subjects)
+                    viewer.list_subjects()
+                    print("All required subjects updated")
+                except SubjectNotFoundError as error:
+                    print(f"Error: {error}")
                 return
 
         case "fetch":
             updater = view.Updater(apihandler)
             viewer = view.Viewer([Subject(args.id)], updater)
-            viewer.update_subjects()
-            dbhandler.insert_subjects(*viewer.subjects)
-            viewer.list_subjects()
-            print("All required subject fetched")
+            try:
+                viewer.update_subjects()
+                dbhandler.insert_subjects(*viewer.subjects)
+                viewer.list_subjects()
+                print("All required subject fetched")
+            except SubjectNotFoundError as error:
+                print(f"Error: {error}")
             return
 
         case "remove":
-            subject_id = args.id
-            subject = dbhandler.fetch_subject(subject_id)
-            if subject is None:
-                print(f"There is no such ID in the database.: {subject_id}")
-                return
+
             viewer = view.Viewer([Subject(args.id)], view.Updater(dbhandler))
-            viewer.update_subjects()
-            dbhandler.remove_subjects(*viewer.subjects)
-            viewer.list_subjects()
-            print("All required subject removed")
+            try:
+                viewer.update_subjects()
+                dbhandler.remove_subjects(*viewer.subjects)
+                viewer.list_subjects()
+                print("All required subject removed")
+            except SubjectNotFoundError as error:
+                print(f"Error: {error}")
             return
 
         case "search":
