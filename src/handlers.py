@@ -3,9 +3,14 @@ import requests
 import sqlite3
 import json
 from subjects import Subject, Rating, Tag
+from exceptions import SubjectNotFoundError
 
 
 class SubjectHandler(ABC):
+    @abstractmethod
+    def check_subject(self, subject_id) -> bool:
+        pass
+
     @abstractmethod
     def fetch_subject(self, subject_id) -> Subject:
         pass
@@ -163,6 +168,14 @@ class DBHandler(SubjectHandler):
     @staticmethod
     def get_infobox_field_from_subject(subject: Subject) -> str:
         return json.dumps(subject.infobox, ensure_ascii=False)
+
+    def check_subject(self, subject_id: int) -> bool:
+        return (
+            self.connection.execute(
+                "SELECT NAME, TYPE, DATE FROM SUBJECTS WHERE ID = ?", (subject_id,)
+            ).fetchone()
+            is not None
+        )
 
     def fetch_subject(self, subject_id: int) -> Subject:
         result = self.connection.execute(
